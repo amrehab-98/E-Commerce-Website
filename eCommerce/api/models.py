@@ -6,22 +6,9 @@ from django.db import models
 from django.contrib.auth.models import User 
 
 # Create your models here.
-class Category(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField()
-
-    class Meta:
-        ordering = ('name',)
-    
-    def __str__(self):
-        return self.name
-    
-    def get_absolute_url(self):
-        return f'/{self.slug}/'
-
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     owner = models.ForeignKey('MyUser', related_name='products', on_delete=models.CASCADE)
+    category = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField(blank=True, null=True)
@@ -69,7 +56,7 @@ class Product(models.Model):
         return thumbnail
 
 class MyUser(User):
-    not_owned_products = models.ManyToManyField(Product)
+    not_owned_products = models.ManyToManyField(Product, blank=True)
     balance = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self):
