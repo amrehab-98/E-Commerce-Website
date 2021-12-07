@@ -1,15 +1,16 @@
 from django.db.models import Q
 from django.http import Http404
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework import status, authentication, permissions
 from django.shortcuts import get_object_or_404
+from django.conf import settings
+from django.contrib.auth.models import User
 
 
-from .models import MyUser, Product
-from .serializers import ProductSerializer, RegSerializer, UserSerializer
+from .models import MyUser, Product, Order, OrderItem
+from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer
 from api import serializers
 
 # Create your views here.
@@ -74,3 +75,48 @@ class Users(APIView):
             return Response({"status": "success", "data": user.username})
         else:
             return Response({"status": "error", "data": serializer.errors})
+
+
+class OrdersList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        orders = Order.objects.filter(user=request.user)
+        serializer = MyOrderSerializer(orders, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = OrderSerializer(data=request.data)
+        if serializer.is_valid():
+            paid_amount = sum(item.get('quantity') * item.get('product').price for item in serializer.validated_data['items'])
+            if request.user.balance >= paid_amount:
+                request.user.balance -= paid_amount
+                for item in serializer.validated_data['items']:
+                    owner = Product.object.get(id=item.get('product').id).owner
+                    owner.balance += item.get('product').price * item.get('quantity')
+                    owner.save()
+                request.user.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"status": "error", "data": "Insufficient Balance"})       
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+            
+        #     try:
+        #         charge = stripe.Charge.create(
+        #             amount=int(paid_amount * 100),
+        #             currency='USD',
+        #             description='Charge from Djackets',
+        #             source=serializer.validated_data['stripe_token']
+        #         )
+
+        #         serializer.save(user=request.user, paid_amount=paid_amount)
+
+        #     except Exception:
+        #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+          
+
+
+        
+ 

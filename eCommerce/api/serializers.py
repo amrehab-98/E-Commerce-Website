@@ -106,10 +106,8 @@ class OrderSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "address",
-            "zipcode",
             "place",
             "phone",
-            "stripe_token",
             "items",
         )
 
@@ -121,3 +119,4 @@ class OrderSerializer(serializers.ModelSerializer):
             OrderItem.objects.create(order=order, **item_data)
 
         return order
+
