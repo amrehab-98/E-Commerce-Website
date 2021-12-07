@@ -9,12 +9,13 @@ from django.shortcuts import get_object_or_404
 
 
 from .models import MyUser, Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, RegSerializer, UserSerializer
+from api import serializers
 
 # Create your views here.
-class LatestProductsList(APIView):
+class ProductsList(APIView):
         def get(self, request, format=None):
-            products = Product.objects.all()[0:4]
+            products = Product.objects.all()
             serializer = ProductSerializer(products, many=True)
             return Response(serializer.data)
 
@@ -57,5 +58,19 @@ class ProductDetail(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response({"status": "success", "data": serializer.data})
+        else:
+            return Response({"status": "error", "data": serializer.errors})
+
+class Users(APIView):
+    def get(self, request):
+        users = MyUser.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = RegSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({"status": "success", "data": user.username})
         else:
             return Response({"status": "error", "data": serializer.errors})

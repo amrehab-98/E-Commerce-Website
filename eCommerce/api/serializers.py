@@ -28,6 +28,33 @@ class UserSerializer(serializers.ModelSerializer):
             "get_absolute_url"
         )
 
+class RegSerializer(serializers.ModelSerializer):
+    confirm_password = serializers.CharField(style={'input_type'} ,write_only=True)
+
+    class Meta:
+        model = MyUser
+        fields = ['first_name', 'last_name', 'username', 'email', 'password', 'confirm_password']
+        extra_kwargs = {
+            'password':{'write_only':True}
+        }
+
+    def save(self):
+        user = MyUser(
+            first_name = self.validated_data['first_name'],
+            last_name = self.validated_data['last_name'],
+            username = self.validated_data['username'],
+            email = self.validated_data['email'],
+        )
+        password = self.validated_data['password']
+        confirm_password = self.validated_data['confirm_password']
+        if password != confirm_password:
+            raise serializers.ValidationError({'password':'Password don\'t match.'})
+        user.set_password(password)
+        user.save()
+        return user
+
+
+
 
 class MyOrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
@@ -57,7 +84,6 @@ class MyOrderSerializer(serializers.ModelSerializer):
             "items",
             "paid_amount"
         )
-
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
