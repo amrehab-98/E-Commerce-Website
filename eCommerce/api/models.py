@@ -3,7 +3,7 @@ from PIL import Image
 
 from django.core.files import File
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
@@ -57,9 +57,9 @@ class Product(models.Model):
         return thumbnail
 
 
-class MyUser(User):
+class MyUser(AbstractUser):
     not_owned_products = models.ManyToManyField(Product, blank=True)
-    balance = models.DecimalField(max_digits=7, decimal_places=2)
+    balance = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name

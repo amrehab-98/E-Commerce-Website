@@ -1,11 +1,12 @@
+from django.conf.urls import url
 from django.urls import path, include
 
 from api import views
 
 urlpatterns = [
     path('products/', views.ProductsList.as_view()),
-    path('<username>/products/', views.ProductDetail.as_view()),
-    path('<username>/products/<int:id>/', views.ProductDetail.as_view()),
+    url(r'^(?P<username>)[-\w.]+/products/', views.ProductsDetails.as_view()),
+    url(r'^users/(?P<username>)[-\w.]+/products/(?P<id>)[0-9]+/', views.ProductsDetails.as_view()),
     path('users/', views.Users.as_view()),
-    path('/orders', views.OrdersList.as_view()),
+    path('orders/', views.OrdersList.as_view()),
 ]

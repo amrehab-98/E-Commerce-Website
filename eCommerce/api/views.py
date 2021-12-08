@@ -15,12 +15,12 @@ from api import serializers
 
 # Create your views here.
 class ProductsList(APIView):
-        def get(self, request, format=None):
-            products = Product.objects.all()
-            serializer = ProductSerializer(products, many=True)
-            return Response(serializer.data)
+    def get(self, request, format=None):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
 
-class ProductDetail(APIView):
+class ProductsDetails(APIView):
     def get(self, request, username, id=None):
         if id:
             try:
@@ -32,15 +32,18 @@ class ProductDetail(APIView):
         else:
             try:
                 user = MyUser.objects.get(username=username)
-                products = Product.objects.filter(owner=username)
+                products = Product.objects.filter(owner=user.id)
                 not_owned_products = user.get_unowned_products()
-                products = products + not_owned_products
                 serializer = ProductSerializer(products,many=True)
-                return Response(serializer.data)
+                not_owned_serializer = ProductSerializer(not_owned_products, many=True)
+                result = {}
+                result['owned_products'] = serializer.data
+                result['not_owned_products'] = not_owned_serializer.data
+                return Response(result)
             except MyUser.DoesNotExist:
                 raise Http404
 
-    def post(self, request):
+    def post(self, request, username):
         serializer = ProductSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -48,12 +51,12 @@ class ProductDetail(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
-    def delete(self, request, id = None):
+    def delete(self, request, username, id = None):
         item = get_object_or_404(Product, id = id)
         item.delete()
         return Response({"status": "success", "data": "Item Deleted"})
 
-    def put(self, request, id=None):
+    def put(self, request, username, id=None):
         product = Product.objects.get(id=id)
         serializer = ProductSerializer(product, data=request.data)
         if serializer.is_valid():
