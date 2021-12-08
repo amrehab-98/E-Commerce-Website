@@ -6,9 +6,9 @@
 
                 <form @submit.prevent="submitForm">
                     <div class="field">
-                        <label>Username</label>
+                        <label>Email</label>
                         <div class="control">
-                            <input type="text" class="input" v-model="username">
+                            <input type="text" class="input" v-model="email">
                         </div>
                     </div>
 
@@ -44,7 +44,7 @@ export default {
     name: 'LogIn',
     data() {
         return {
-            username: '',
+            email: '',
             password: '',
             errors: []
         }
@@ -57,13 +57,14 @@ export default {
             axios.defaults.headers.common["Authorization"] = ""
             localStorage.removeItem("token")
             const formData = {
-                username: this.username,
+                username: this.email,
                 password: this.password
             }
+            console.log(formData)
             await axios
-                .post("/api/v1/token/login/", formData)
+                .post("/api/v1/login/", formData)
                 .then(response => {
-                    const token = response.data.auth_token
+                    const token = response.data.token
                     this.$store.commit('setToken', token)
                     
                     axios.defaults.headers.common["Authorization"] = "Token " + token

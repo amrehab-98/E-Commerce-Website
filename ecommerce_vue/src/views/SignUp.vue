@@ -9,14 +9,14 @@
                     <div class="field">
                         <label>First name</label>
                         <div class="control">
-                            <input type="text" class="input" v-model="firstname">
+                            <input type="text" class="input" v-model="first_name">
                         </div>
                     </div>
 
                     <div class="field">
                         <label>Last name</label>
                         <div class="control">
-                            <input type="text" class="input" v-model="lastname">
+                            <input type="text" class="input" v-model="last_name">
                         </div>
                     </div>
 
@@ -44,7 +44,7 @@
                     <div class="field">
                         <label>Confirm password</label>
                         <div class="control">
-                            <input type="password" class="input" v-model="password2">
+                            <input type="password" class="input" v-model="confirm_password">
                         </div>
                     </div>
 
@@ -75,11 +75,11 @@ export default {
     data() {
         return {
             email : '',
-            firstname: '',
-            lastname: '',
+            first_name: '',
+            last_name: '',
             username: '',
             password: '',
-            password2: '',
+            confirm_password: '',
             errors: []
         }
     },
@@ -94,10 +94,10 @@ export default {
             if (this.username === '') {
                 this.errors.push('The username is missing')
             }
-            if (this.firstname === '') {
+            if (this.first_name === '') {
                 this.errors.push('The firstname is missing')
             }
-            if (this.lastname === '') {
+            if (this.last_name === '') {
                 this.errors.push('The lastname is missing')
             }
             if (this.email === '') {
@@ -106,19 +106,20 @@ export default {
             if (this.password === '') {
                 this.errors.push('The password is too short')
             }
-            if (this.password !== this.password2) {
+            if (this.password !== this.confirm_password) {
                 this.errors.push('The passwords doesn\'t match')
             }
             if (!this.errors.length) {
                 const formData = {
                     username: this.username,
-                    firstname: this.firstname,
-                    lastname: this.lastname,
+                    first_name: this.first_name,
+                    last_name: this.last_name,
                     email: this.email,
-                    password: this.password
+                    password: this.password,
+                    confirm_password: this.confirm_password
                 }
                 axios
-                    .post("/api/v1/users/", formData)
+                    .post("/api/v1/register/", formData)
                     .then(response => {
                         toast({
                             message: 'Account created, please log in!',
@@ -128,7 +129,12 @@ export default {
                             duration: 2000,
                             position: 'bottom-right',
                         })
-                        this.$router.push('/log-in')
+                        const token = response.data.token
+                        this.$store.commit('setToken', token)
+                    
+                        axios.defaults.headers.common["Authorization"] = "Token " + token
+                        localStorage.setItem("token", token)
+                        this.$router.push('/')
                     })
                     .catch(error => {
                         if (error.response) {
