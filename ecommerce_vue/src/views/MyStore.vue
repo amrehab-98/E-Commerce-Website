@@ -38,16 +38,16 @@ export default {
        MyProductBox
   },
   mounted() {
-    this.getLatestProducts()
+    this.getMyProducts()
     document.title = 'My Store | LA'
   },
   methods: {
-    async getLatestProducts() {
+    async getMyProducts() {
       this.$store.commit('setIsLoading', true)
       await axios
-        .get('/api/v1/my-store/')
+        .get('/api/v1/users/')
         .then(response => {
-          this.latestProducts = response.data
+          this.Products = response.data
         })
         .catch(error => {
           console.log(error)
