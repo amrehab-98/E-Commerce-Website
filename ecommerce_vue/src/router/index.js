@@ -1,5 +1,23 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+import store from '../store'
+
 import Home from '../views/Home.vue'
+
+import Product from '../views/Product.vue'
+import Users from '../views/Users.vue'
+import Search from '../views/Search.vue'
+import Cart from '../views/Cart.vue'
+import SignUp from '../views/SignUp.vue'
+import LogIn from '../views/LogIn.vue'
+import MyAccount from '../views/MyAccount.vue'
+import Checkout from '../views/CheckOut.vue'
+import Success from '../views/Success.vue'
+import UserStore from '../views/UserStore.vue'
+import AddProduct from '../views/AddProduct.vue'
+import MyStore from '../views/MyStore.vue'
+
+
 
 const routes = [
   {
@@ -14,12 +32,86 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+  },
+  {
+    path: '/sign-up',
+    name: 'SignUp',
+    component: SignUp
+  },
+  {
+    path: '/log-in',
+    name: 'LogIn',
+    component: LogIn
+  },
+  {
+    path: '/my-account',
+    name: 'MyAccount',
+    component: MyAccount,
+    // meta: {
+    //     requireLogin: true
+    // }
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
+  {
+    path: '/cart',
+    name: 'Cart',
+    component: Cart
+  },
+  {
+    path: '/cart/success',
+    name: 'Success',
+    component: Success
+  },
+  {
+    path: '/cart/checkout',
+    name: 'Checkout',
+    component: Checkout,
+    // meta: {
+    //     requireLogin: true
+    // }
+  },
+  {
+    path: '/users/:myuser_slug/:product_slug',
+    name: 'Product',
+    component: Product
+  },
+  {
+    path: '/users/:myuser_slug',
+    name: 'UserStore',
+    component: UserStore
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users
+  },
+  {
+    path: '/my-store/add-product',
+    name: 'AddProduct',
+    component: AddProduct
+  },
+  {
+    path: '/my-store',
+    name: 'MyStore',
+    component: MyStore
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireLogin) && !store.state.isAuthenticated) {
+    next({ name: 'LogIn', query: { to: to.path } });
+  } else {
+    next()
+  }
 })
 
 export default router
