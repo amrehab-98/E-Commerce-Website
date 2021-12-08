@@ -1,25 +1,23 @@
 <template>
-  <div class="home">
-    <section class="hero is-small is-dark mb-6">
-        <div class="hero-body has-text-centered">
-            <p class="title mb-6">
-                Welcome to LA Store
-            </p>
-            <p class="subtitle">
-                The best online store
-            </p>
-        </div>
-    </section>
-
+  <div class="users">
+  
     <div class="columns is-multiline">
       <div class="column is-12">
-          <h2 class="is-size-2 has-text-centered"> Products</h2>
+          <h2 class=" title is-size-2 has-text-centered">My Store</h2>
       </div>
 
-      <ProductBox 
+       <MyProductBox 
         v-for="product in Products"
         v-bind:key="product.id"
         v-bind:product="product" />
+
+        <ProductBox 
+        v-for="product in Products"
+        v-bind:key="product.id"
+        v-bind:product="product" />
+
+      
+
     </div>
   </div>
 </template>
@@ -27,25 +25,27 @@
 <script>
 import axios from 'axios'
 import ProductBox from '@/components/ProductBox'
+import MyProductBox from '@/components/MyProductBox'
 export default {
   name: 'Home',
   data() {
     return {
-      Products: []
+      Product: []
     }
   },
   components: {
-    ProductBox
+       ProductBox,
+       MyProductBox
   },
   mounted() {
-    this.getProducts()
-    document.title = 'Home | LA'
+    this.getMyProducts()
+    document.title = 'My Store | LA'
   },
   methods: {
-    async getProducts() {
+    async getMyProducts() {
       this.$store.commit('setIsLoading', true)
       await axios
-        .get('/api/v1/products/')
+        .get('/api/v1/users/')
         .then(response => {
           this.Products = response.data
         })
@@ -57,4 +57,3 @@ export default {
   }
 }
 </script>
-
