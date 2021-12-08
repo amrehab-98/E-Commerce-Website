@@ -24,7 +24,6 @@ class SpecificProductDetails(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, username, id):
         try:
-            print("hey world")
             product = Product.objects.get(id=id)
             if product.owner.username != username:
                 raise Http404
@@ -38,9 +37,7 @@ class ProductsDetails(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, username=None):
         try:
-            print("username:", username)
             user = MyUser.objects.get(username=username)
-            print(user)
             products = Product.objects.filter(owner=user.id)
             not_owned_products = user.get_not_owned_products()
             serializer = ProductSerializer(products,many=True)
@@ -118,7 +115,36 @@ class OrdersList(APIView):
                 return Response({"status": "error", "data": "Insufficient Balance"})       
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-            
+class SearchProducts(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        query = request.data.get('query', '')
+
+        if query:
+            products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+            serializer = ProductSerializer(products, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"products": []})
+
+class SearchStores(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        query = request.data.get('query', '')
+
+        if query:
+            users = MyUser.objects.filter(Q(first_name__icontains=query) | Q(last_name_icontains=query) | Q(username_icontains=query))
+            serializer = UserSerializer(users, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({"users": []})
+
+
+
+
+
         #     try:
         #         charge = stripe.Charge.create(
         #             amount=int(paid_amount * 100),
