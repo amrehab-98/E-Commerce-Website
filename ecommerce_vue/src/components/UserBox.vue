@@ -1,13 +1,10 @@
 <template>
     <div class="column is-3">
         <div class="box">
-            <figure class="image mb-4">
-                <img v-bind:src="product.get_thumbnail">
-            </figure>
 
-            <h3 class="is-size-4">{{ myuser.first_name }}</h3>
+            <h3 class="is-size-4">{{ myuser.username }}</h3>
 
-            <router-link v-bind:to="myuser.get_absolute_url" class="button is-dark mt-4">View Store</router-link>
+            <router-link to="/" class="button is-dark mt-4">View Store</router-link>
         </div>
     </div>
 </template>

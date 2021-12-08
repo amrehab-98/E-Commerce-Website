@@ -37,7 +37,7 @@ export default {
       await axios
         .get('/api/v1/users/')
         .then(response => {
-          this.latestProducts = response.data
+          this.Users= response.data
         })
         .catch(error => {
           console.log(error)
