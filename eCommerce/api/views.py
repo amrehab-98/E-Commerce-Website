@@ -2,16 +2,13 @@ from django.db.models import Q
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework import status, authentication, permissions
 from django.shortcuts import get_object_or_404
-from django.conf import settings
-from django.contrib.auth.models import User
 
 
-from .models import MyUser, Product, Order, OrderItem
+from .models import MyUser, Product, Order
 from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer
-from api import serializers
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class ProductsList(APIView):
@@ -75,7 +72,8 @@ class Users(APIView):
         serializer = RegSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return Response({"status": "success", "data": user.username})
+            token = Token.objects.get(user=user).key
+            return Response({"status": "success", "token": token})
         else:
             return Response({"status": "error", "data": serializer.errors})
 
