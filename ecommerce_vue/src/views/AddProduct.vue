@@ -3,8 +3,14 @@
         <div class="columns">
             <div class="column is-4 is-offset-4">
                 <h1 class="title">Add Product</h1>
-
                 <form @submit.prevent="submitForm">
+                   
+                    <div class="field">
+                        <label>Product image</label>
+                        <div class="control"> 
+                            <input type="file" accept="image/*" @change="uploadImage($event)" id="file-input">
+                        </div>
+                    </div>
                    
                     <div class="field">
                         <label>Product name</label>
@@ -61,6 +67,7 @@ export default {
             category: '',
             description: '',
             price: 1,
+            image : {},
             errors: []
         }
     },
@@ -70,6 +77,30 @@ export default {
     },
 
     methods: {
+        uploadImage(event) {
+
+            const URL = 'http://foobar.com/upload'; 
+
+            let data = new FormData();
+            data.append('name', 'my-picture');
+            data.append('file', event.target.files[0]); 
+
+            let config = {
+            header : {
+                'Content-Type' : 'image/png'
+            }
+            }
+
+            axios.put(
+            URL, 
+            data,
+            config
+            ).then(
+            response => {
+                console.log('image upload response > ', response)
+            }
+            )
+        },
         submitForm() {
             this.errors = []
             if (this.productname === '') {
@@ -90,7 +121,8 @@ export default {
                     category: this.category,
                     description: this.description,
                     category: this.category,
-                    price: this.price
+                    price: this.price,
+                    image: this.data
                 }
                 axios
                     .post("/api/v1/users/", formData)
