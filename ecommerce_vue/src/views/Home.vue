@@ -38,16 +38,16 @@ export default {
     ProductBox
   },
   mounted() {
-    this.getLatestProducts()
+    this.getProducts()
     document.title = 'Home | LA'
   },
   methods: {
-    async getLatestProducts() {
+    async getProducts() {
       this.$store.commit('setIsLoading', true)
       await axios
         .get('/api/v1/products/')
         .then(response => {
-          this.latestProducts = response.data
+          this.Products = response.data
         })
         .catch(error => {
           console.log(error)
