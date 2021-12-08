@@ -12,12 +12,16 @@ from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class ProductsList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
 class SpecificProductDetails(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, username, id):
         try:
             print("hey world")
@@ -30,6 +34,8 @@ class SpecificProductDetails(APIView):
             raise Http404
 
 class ProductsDetails(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, username=None):
         try:
             print("username:", username)
@@ -69,6 +75,8 @@ class ProductsDetails(APIView):
             return Response({"status": "error", "data": serializer.errors})
 
 class UsersList(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
         users = MyUser.objects.all()
         serializer = UserSerializer(users, many=True)
