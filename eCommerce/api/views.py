@@ -68,12 +68,13 @@ class ProductsDetails(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors})
 
-class Users(APIView):
+class UsersList(APIView):
     def get(self, request):
         users = MyUser.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
+class Users(APIView):
     def post(self, request):
         serializer = RegSerializer(data=request.data)
         if serializer.is_valid():
