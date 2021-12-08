@@ -17,28 +17,34 @@ class ProductsList(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
+class SpecificProductDetails(APIView):
+    def get(self, request, username, id):
+        try:
+            print("hey world")
+            product = Product.objects.get(id=id)
+            if product.owner.username != username:
+                raise Http404
+            serializer = ProductSerializer(product)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            raise Http404
+
 class ProductsDetails(APIView):
-    def get(self, request, username, id=None):
-        if id:
-            try:
-                product = Product.objects.get(id=id)
-                serializer = ProductSerializer(product)
-                return Response(serializer.data)
-            except Product.DoesNotExist:
-                raise Http404
-        else:
-            try:
-                user = MyUser.objects.get(username=username)
-                products = Product.objects.filter(owner=user.id)
-                not_owned_products = user.get_unowned_products()
-                serializer = ProductSerializer(products,many=True)
-                not_owned_serializer = ProductSerializer(not_owned_products, many=True)
-                result = {}
-                result['owned_products'] = serializer.data
-                result['not_owned_products'] = not_owned_serializer.data
-                return Response(result)
-            except MyUser.DoesNotExist:
-                raise Http404
+    def get(self, request, username=None):
+        try:
+            print("username:", username)
+            user = MyUser.objects.get(username=username)
+            print(user)
+            products = Product.objects.filter(owner=user.id)
+            not_owned_products = user.get_not_owned_products()
+            serializer = ProductSerializer(products,many=True)
+            not_owned_serializer = ProductSerializer(not_owned_products, many=True)
+            result = {}
+            result['owned_products'] = serializer.data
+            result['not_owned_products'] = not_owned_serializer.data
+            return Response(result)
+        except MyUser.DoesNotExist:
+            raise Http404
 
     def post(self, request, username):
         serializer = ProductSerializer(data=request.data)

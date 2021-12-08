@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import RegexValidator
 
 
 # Create your models here.
@@ -95,7 +96,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     first_name=models.CharField(max_length=50)
     last_name=models.CharField(max_length=50)
     email=models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username=models.CharField(max_length=30, unique=True)
+    alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+    username=models.CharField(max_length=30, unique=True, validators=[alphanumeric])
     not_owned_products=models.ManyToManyField(Product, blank=True)
     balance=models.DecimalField(max_digits=7, decimal_places=2, default=0)
     date_joined=models.DateTimeField(verbose_name="date joined", auto_now_add=True)
