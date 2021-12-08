@@ -28,16 +28,16 @@ export default {
        UserBox
   },
   mounted() {
-    this.getLatestProducts()
+    this.getUsers()
     document.title = 'Users | LA'
   },
   methods: {
-    async getLatestProducts() {
+    async getUsers() {
       this.$store.commit('setIsLoading', true)
       await axios
         .get('/api/v1/users/')
         .then(response => {
-          this.Users= response.data
+          this.Users = response.data
         })
         .catch(error => {
           console.log(error)
