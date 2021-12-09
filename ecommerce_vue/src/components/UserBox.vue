@@ -14,7 +14,8 @@ export default {
     name: 'UserBox',
     props: {
         myuser: Object
-    }
+    },
+
 }
 </script>
 

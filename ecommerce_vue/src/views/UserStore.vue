@@ -27,7 +27,13 @@ export default {
   data() {
     return {
       Product: [],
-      username : this.$route.params.username
+      username : this.$route.params.username,     
+      myuser: {
+        data: 
+        {
+            username: '',
+        }
+      }  
     }
   },
   components: {
@@ -35,6 +41,7 @@ export default {
        MyProductBox
   },
   mounted() {
+    this.getMyInfo()
     this.getMyProducts()
     document.title = 'My Store | LA'
   },
@@ -50,6 +57,21 @@ export default {
           console.log(error)
         })
       this.$store.commit('setIsLoading', false)
+    },
+    async getMyInfo() {
+    this.$store.commit('setIsLoading', true)
+    await axios
+        .get('/api/v1/user/info/')
+        .then(response => {
+            this.myuser = response.data
+            if(this.myuser.data.username == this.username){
+              this.$router.push('/my-store')
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        this.$store.commit('setIsLoading', false)
     }
     
   }

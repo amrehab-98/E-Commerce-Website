@@ -30,6 +30,20 @@ class MyStoreProductsList(APIView):
         except:
             raise HttpResponseBadRequest
     
+    def put(self, request):
+        product = Product.objects.get(id=request.data['id'])
+        if request.user != product.owner:
+            return Response({"status": "error", "data": "not authorized"})
+        try:
+            product.name = request.data['name']
+            product.category = request.data['category']
+            product.description = request.data['description']
+            product.price = request.data['price']
+            product.save()
+            return Response({"status": "success"})
+        except:
+            return Response({"status": "error", "data": "error editing product"})
+    
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
         request.data['owner'] = request.user.id
@@ -178,19 +192,7 @@ class EditAndDeleteProduct(APIView):
         item.delete()
         return Response({"status": "success", "data": "Item Deleted"})
 
-    def put(self, request, id=None):
-        product = Product.objects.get(id=id)
-        if request.user != product.owner:
-            return Response({"status": "error", "data": "not authorized"})
-        try:
-            product.name = request.data['name']
-            product.category = request.data['category']
-            product.description = request.data['description']
-            product.price = request.data['price']
-            product.save()
-            return Response({"status": "success"})
-        except:
-            return Response({"status": "error", "data": "error editing product"})
+
 
 class PersonalInfo(APIView):
     authentication_classes = [authentication.TokenAuthentication]

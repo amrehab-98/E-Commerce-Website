@@ -115,6 +115,7 @@ export default {
             }
             if (!this.errors.length) {
                 const formData = {
+                    id: this.id,
                     name: this.name,
                     category: this.category,
                     description: this.description,
@@ -124,7 +125,7 @@ export default {
                 }
                 console.log(this.id)
                 axios
-                    .put(`/api/v1/product/${this.id}/`, formData)
+                    .put(`/api/v1/store/`, formData)
                     .then(response => {
                         toast({
                             message: 'Product edited successfully ',
