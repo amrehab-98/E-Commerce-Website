@@ -18,11 +18,12 @@
 
                 <div class="field has-addons mt-6">
                     <div class="control">
-                        <input type="number" class="input" min="1" v-model="quantity">
-                    </div>
-
-                    <div class="control">
                         <a class="button is-dark" @click="addToCart()">Add to cart</a>
+                    </div>
+                </div>
+                <div class="field has-addons mt-3">
+                    <div class="control">
+                        <a class="button is-dark" @click="addToMyStore()">Add to my store</a>
                     </div>
                 </div>
             </div>
@@ -78,7 +79,24 @@ export default {
                 duration: 2000,
                 position: 'bottom-right',
             })
-        }
+        },
+        async addToMyStore() {
+            this.$store.commit('setIsLoading', true)
+            const id = this.$route.params.id
+            const info = {
+                id: id
+            }
+            await axios
+                .post(`/api/v1/products/addtomystore/`, info)
+                .then(response => {
+                    this.$router.push('/my-store')
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            
+            this.$store.commit('setIsLoading', false) 
+        },
     }
 }
 </script>

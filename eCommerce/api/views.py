@@ -225,4 +225,13 @@ class AddBalance(APIView):
         except Exception:
             return Response({"status":"error", "data":"Something went wrong. Please try again"}, 400)
         
- 
+class AddToMyStore(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        print("id: ", request.data['id'])
+        product = Product.objects.get(id=request.data['id'])
+        print("Product name: ",product.name)
+        request.user.not_owned_products.add(product) 
+        request.user.save()
+        return Response({"status": "success", "data": request.data})

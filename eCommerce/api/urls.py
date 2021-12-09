@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.core.exceptions import ViewDoesNotExist
 from django.urls import path, include
 
 from api import views
@@ -19,4 +20,5 @@ urlpatterns = [
     # path('stores/search/', views.SearchStores.as_view()),
     path('user/info/', views.PersonalInfo.as_view()),
     path('account/charge/', views.AddBalance.as_view()),
+    path('products/addtomystore/', views.AddToMyStore.as_view()),
 ]
