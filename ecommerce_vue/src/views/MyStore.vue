@@ -6,6 +6,10 @@
           <h2 class=" title is-size-2 has-text-centered">My Store</h2>
       </div>
 
+      <div class="column is-12">
+          <router-link to="/my-store/add-product/" class="button is-success mt-4 is-pulled-right">Add Product</router-link>
+      </div>
+
        <MyProductBox 
         v-for="product in Product['owned_products']"
         v-bind:key="product.id"
