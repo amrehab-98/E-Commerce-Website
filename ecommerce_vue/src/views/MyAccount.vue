@@ -19,10 +19,11 @@
                 <div class="column is-12">
                     <h2 class = "subtitle" ><strong>Balance: </strong>${{myuser.data.get_balance}}</h2>
                 </div>
+                 
                 <div class="column is-12">
-                    <button class="button is-dark" @click="BuyCoins">Buy Coins</button>
+                    <router-link to="/my-account/charge-balance" class="button is-dark" @click="BuyCoins">Charge Balance</router-link>
                 </div>
-                 <hr>
+                <hr>
 
            </div>
 

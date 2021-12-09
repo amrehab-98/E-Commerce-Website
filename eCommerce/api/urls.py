@@ -17,4 +17,5 @@ urlpatterns = [
     path('products/search/', views.SearchProducts.as_view()),
     path('stores/search/', views.SearchStores.as_view()),
     path('user/info/', views.PersonalInfo.as_view()),
+    path('account/charge/', views.AddBalance.as_view()),
 ]

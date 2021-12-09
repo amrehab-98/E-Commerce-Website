@@ -9,6 +9,8 @@ import decimal
 from .models import MyUser, Product, Order
 from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer, PersonalInfoSerializer
 from rest_framework.authtoken.models import Token
+from django.conf import settings
+import stripe
 
 # Create your views here.
 class MyStoreProductsList(APIView):
@@ -180,22 +182,6 @@ class EditAndDeleteProduct(APIView):
         else:
             return Response({"status": "error", "data": serializer.errors})
 
-
-
-        #     try:
-        #         charge = stripe.Charge.create(
-        #             amount=int(paid_amount * 100),
-        #             currency='USD',
-        #             description='Charge from Djackets',
-        #             source=serializer.validated_data['stripe_token']
-        #         )
-
-        #         serializer.save(user=request.user, paid_amount=paid_amount)
-
-        #     except Exception:
-        #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-          
-
 class PersonalInfo(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -206,6 +192,25 @@ class PersonalInfo(APIView):
         serializer = PersonalInfoSerializer(user)  
         return Response({"status": "success", "data": serializer.data})
   
-
+class AddBalance(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, requset):
+        user = MyUser.objects.get(id = requset.user.id)
+        data = requset.data
+        print("data: ", data)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        try:
+            charge = stripe.Charge.create(
+                amount=data.get("amount"),
+                currency='USD',
+                description='Charge from LA Store',
+                source=data.get("stripe_token")
+            )
+            user.balance = user.balance.to_decimal() + decimal.Decimal(data.get("amount"))
+            user.save()
+            return Response(data, status=status.HTTP_201_CREATED)
+        except Exception:
+            return Response({"status":"error", "data":"Something went wrong. Please try again"}, 400)
         
  

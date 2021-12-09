@@ -16,6 +16,7 @@ import Success from '../views/Success.vue'
 import UserStore from '../views/UserStore.vue'
 import AddProduct from '../views/AddProduct.vue'
 import MyStore from '../views/MyStore.vue'
+import ChargeBalance from '../views/ChargeBalance.vue' 
 
 
 
@@ -99,6 +100,11 @@ const routes = [
     path: '/my-store',
     name: 'MyStore',
     component: MyStore
+  },
+  {
+    path:'/my-account/charge-balance',
+    name:'ChargeBalance',
+    component:ChargeBalance
   },
 ]
 
