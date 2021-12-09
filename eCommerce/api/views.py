@@ -128,33 +128,24 @@ class OrdersList(APIView):
     
     def post(self, request):
         serializer = OrderSerializer(data=request.data)
-        print("hello world")
-        print(request.data)
         if serializer.is_valid():
             paid_amount = sum(item.get('price') for item in serializer.validated_data['items'])
-            print("paid amount: ",paid_amount)
             if request.user.balance.to_decimal() >= paid_amount:
-                print("user balance before: ",request.user.balance)
                 request.user.balance = request.user.balance.to_decimal() - paid_amount
-                print("user balance after: ",request.user.balance)
                 for item in serializer.validated_data['items']:
                     owner = Product.objects.get(id=item.get('product').id).owner
-                    print("owner balance before: ",owner.balance)
                     owner.balance = owner.balance.to_decimal() + item.get('product').price.to_decimal()
-                    print("owner balance after: ",owner.balance)
                     product =Product.objects.get(id=item.get('product').id)
                     product.owner = request.user
                     product.price = product.price.to_decimal() + decimal.Decimal('0')
-                    print("check point")
                     
                     product.save()
-                    print("check point 2")
                     owner.save()
                 request.user.save()
                 serializer.save(user=request.user, paid_amount=paid_amount)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
-                return Response({"status": "error", "data": "Insufficient Balance"})       
+                return Response({"status": "error", "data": "Insufficient Balance"}, status=status.HTTP_400_BAD_REQUEST)       
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class Search(APIView):

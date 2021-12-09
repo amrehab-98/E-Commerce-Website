@@ -186,7 +186,7 @@ export default {
                     this.$router.push('/cart/success')
                 })
                 .catch(error => {
-                    this.errors.push('Something went wrong. Please try again')
+                    this.errors.push("Insificient Balance")
                     console.log(error)
                 })
             }
