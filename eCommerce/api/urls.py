@@ -16,4 +16,5 @@ urlpatterns = [
     path('login/', obtain_auth_token, name="login"),
     path('products/search/', views.SearchProducts.as_view()),
     path('stores/search/', views.SearchStores.as_view()),
+    path('user/info/', views.PersonalInfo.as_view()),
 ]

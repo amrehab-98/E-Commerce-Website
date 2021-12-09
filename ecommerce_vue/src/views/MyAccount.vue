@@ -7,18 +7,23 @@
            <br> <br> <br><br><br>
            <div class = "column is-12 box">
                 <div class="column is-12">
-                    <h2 class = "subtitle" ><strong>Name: </strong> {{myuser.first_name+' '+myuser.last_name}}</h2>
+                    <h2 class = "subtitle" ><strong>Name: </strong>{{myuser.data.get_name}}</h2>
+                </div>
+                <div class="column is-12">
+                    <h2 class = "subtitle" ><strong>Username: </strong>{{myuser.data.username}}</h2>
                 </div>
 
                 <div class="column is-12">
-                    <h2 class = "subtitle" ><strong>Email:</strong>{{myuser.email}}</h2>
+                    <h2 class = "subtitle" ><strong>Email: </strong>{{myuser.data.email}}</h2>
                 </div>
                 <div class="column is-12">
-                    <h2 class = "subtitle" ><strong>Balance:</strong> {{myuser.balance}}</h2>
+                    <h2 class = "subtitle" ><strong>Balance: </strong>${{myuser.data.get_balance}}</h2>
                 </div>
                 <div class="column is-12">
                     <button class="button is-dark" @click="BuyCoins">Buy Coins</button>
                 </div>
+                 <hr>
+
            </div>
 
             <hr>
@@ -46,12 +51,20 @@ export default {
     data() {
         return {
             orders: [],
-            myuser : {}
+            myuser : {
+                data : {
+                    get_name: '',
+                    username: '',
+                    get_balance: 0,
+                    email : '',
+                }
+            }
         }
     },
     mounted() {
         document.title = 'My Account | LA '
         this.getMyOrders()
+        this.getMyInfo()
     },
     methods: {
         async getMyOrders() {
@@ -64,6 +77,20 @@ export default {
                 .catch(error => {
                     console.log(error)
                 })
+            this.$store.commit('setIsLoading', false)
+        },
+        async getMyInfo() {
+        this.$store.commit('setIsLoading', true)
+        await axios
+            .get('/api/v1/user/info/')
+            .then(response => {
+                this.myuser = response.data
+                console.log("request sent")
+                console.log(this.myuser.data.get_name)
+            })
+            .catch(error => {
+                console.log(error)
+            })
             this.$store.commit('setIsLoading', false)
         }
     }

@@ -7,7 +7,7 @@ from rest_framework import status, authentication, permissions
 from django.shortcuts import get_object_or_404
 import decimal
 from .models import MyUser, Product, Order
-from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer
+from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer, PersonalInfoSerializer
 from rest_framework.authtoken.models import Token
 
 # Create your views here.
@@ -195,6 +195,16 @@ class EditAndDeleteProduct(APIView):
         #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
           
 
+class PersonalInfo(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        user = MyUser.objects.get(id = request.user.id)
+        user.balance = user.balance.to_decimal()+decimal.Decimal('0')
+        print("user balance ", user.balance)
+        serializer = PersonalInfoSerializer(user)  
+        return Response({"status": "success", "data": serializer.data})
+  
 
         
  

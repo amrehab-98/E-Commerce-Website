@@ -120,3 +120,16 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return order
 
+    
+
+class PersonalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = (
+            "id",
+            "username",
+            "get_name",
+            "get_absolute_url",
+            "email",
+            "get_balance"
+        )
