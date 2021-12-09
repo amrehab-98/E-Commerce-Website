@@ -8,7 +8,7 @@
             <h3 class="is-size-4">{{ product.name }}</h3>
             <p class="is-size-6 has-text-grey">${{ product.price }}</p>
             
-            <router-link to="#" class="button is-dark mt-4">Edit</router-link>
+            <router-link v-bind:to="'/my-store/edit-product/'+product.id" class="button is-dark mt-4">Edit</router-link>
             <router-link to="#" class="button is-danger mt-4" @click = "deleteProduct(product.id)">Delete</router-link>
         </div>
     </div>

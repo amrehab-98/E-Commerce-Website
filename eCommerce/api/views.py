@@ -173,14 +173,19 @@ class EditAndDeleteProduct(APIView):
         item.delete()
         return Response({"status": "success", "data": "Item Deleted"})
 
-    def put(self, request, username, id=None):
+    def put(self, request, id=None):
         product = Product.objects.get(id=id)
-        serializer = ProductSerializer(product, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data})
-        else:
-            return Response({"status": "error", "data": serializer.errors})
+        if request.user != product.owner:
+            return Response({"status": "error", "data": "not authorized"})
+        try:
+            product.name = request.data['name']
+            product.category = request.data['category']
+            product.description = request.data['description']
+            product.price = request.data['price']
+            product.save()
+            return Response({"status": "success"})
+        except:
+            return Response({"status": "error", "data": "error editing product"})
 
 class PersonalInfo(APIView):
     authentication_classes = [authentication.TokenAuthentication]

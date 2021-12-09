@@ -17,7 +17,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "get_thumbnail"
         )
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser

@@ -17,6 +17,7 @@ import UserStore from '../views/UserStore.vue'
 import AddProduct from '../views/AddProduct.vue'
 import MyStore from '../views/MyStore.vue'
 import ChargeBalance from '../views/ChargeBalance.vue' 
+import EditProduct from '../views/EditProduct.vue'
 
 
 
@@ -95,6 +96,11 @@ const routes = [
     path: '/my-store/add-product',
     name: 'AddProduct',
     component: AddProduct
+  },
+  {
+    path: '/my-store/edit-product/:id',
+    name: 'EditProduct',
+    component: EditProduct
   },
   {
     path: '/my-store',
