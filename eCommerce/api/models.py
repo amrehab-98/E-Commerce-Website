@@ -128,7 +128,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return f'{self.first_name} {self.last_name}'
 
     def get_not_owned_products(self):
-        return self.not_owned_products
+        return self.not_owned_products.all()
 
     def get_balance(self):
         return self.balance

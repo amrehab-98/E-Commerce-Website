@@ -18,13 +18,15 @@ class ProductSerializer(serializers.ModelSerializer):
         )
 
 class UserSerializer(serializers.ModelSerializer):
+    not_owned_products = ProductSerializer(many=True)
     class Meta:
         model = MyUser
         fields = (
             "id",
             "username",
             "get_name",
-            "get_absolute_url"
+            "get_absolute_url",
+            "not_owned_products"
         )
 
 class RegSerializer(serializers.ModelSerializer):

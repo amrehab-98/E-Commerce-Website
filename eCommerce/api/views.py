@@ -57,7 +57,7 @@ class ProductsList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
-        products = Product.objects.all()
+        products = Product.objects.exclude(owner=request.user)
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
@@ -70,7 +70,12 @@ class SpecificProductDetails(APIView):
             if product.owner.username != username:
                 raise Http404
             serializer = ProductSerializer(product)
-            return Response(serializer.data)
+            user = MyUser.objects.get(id=request.user.id)
+            userSerialized = UserSerializer(user)
+            data = {}
+            data['product'] = serializer.data
+            data['user'] = userSerialized.data
+            return Response(data)
         except Product.DoesNotExist:
             raise Http404
 
@@ -231,7 +236,19 @@ class AddToMyStore(APIView):
     def post(self, request):
         print("id: ", request.data['id'])
         product = Product.objects.get(id=request.data['id'])
-        print("Product name: ",product.name)
+        product.price = product.price.to_decimal() + decimal.Decimal('0')
         request.user.not_owned_products.add(product) 
+        request.user.balance = request.user.balance.to_decimal()+decimal.Decimal('0')
         request.user.save()
-        return Response({"status": "success", "data": request.data})
+        return Response({"status": "success", "data": request.data}, status.HTTP_201_CREATED)
+
+class RemoveFromMyStore(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        product = Product.objects.get(id=request.data['id'])
+        request.user.not_owned_products.remove(product) 
+        request.user.not_owned_products.add(product) 
+        request.user.balance = request.user.balance.to_decimal()+decimal.Decimal('0')
+        request.user.save()
+        return Response({"status": "success", "data": request.data}, status.HTTP_201_CREATED)

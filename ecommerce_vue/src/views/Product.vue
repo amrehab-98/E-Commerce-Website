@@ -22,14 +22,17 @@
                     </div>
                 </div>
                 <div class="field has-addons mt-3">
-                    <div class="control">
+                    <div class="control" v-if="!isHidden">
                         <a class="button is-dark" @click="addToMyStore()">Add to my store</a>
+                    </div>
+                    <div class="control" v-else>
+                        <a class="button is-danger" @click="RemoveFromMyStore()">Remove from my store</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</template>
+</template> 
 
 <script>
 import axios from 'axios'
@@ -39,11 +42,30 @@ export default {
     data() {
         return {
             product: {},
-            quantity: 1
+            quantity: 1,
+            user: {},
+            isHidden: false
         }
     },
-    mounted() {
-        this.getProduct() 
+    // created() {
+    //     this.getProduct().then(response=>{
+    //         console.log(this.user.not_owned_products)
+    //         for (var i = 0; i < this.user.not_owned_products.length; i++) {
+    //             if (this.product.id == this.user.not_owned_products[i].id) {
+    //                 this.isHidden = true
+    //             }  
+    //         }
+    //     })
+        
+    // },
+    mounted() {  
+        this.getProduct().then(response=>{
+        for (var i = 0; i < this.user.not_owned_products.length; i++) {
+            if (this.product.id == this.user.not_owned_products[i].id) {
+                this.isHidden = true
+            }  
+        }
+    })    
     },
     methods: {
         async getProduct() {
@@ -53,7 +75,8 @@ export default {
             await axios
                 .get(`/api/v1/${username}/products/${id}`)
                 .then(response => {
-                    this.product = response.data
+                    this.product = response.data.product
+                    this.user = response.data.user
                     document.title = this.product.name + ' | LA'
                 })
                 .catch(error => {
@@ -83,12 +106,33 @@ export default {
         async addToMyStore() {
             this.$store.commit('setIsLoading', true)
             const id = this.$route.params.id
+            console.log(id*2);
             const info = {
                 id: id
             }
             await axios
                 .post(`/api/v1/products/addtomystore/`, info)
                 .then(response => {
+                    console.log("I am here");
+                    this.$router.push('/my-store')
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            
+            this.$store.commit('setIsLoading', false) 
+        },
+        async RemoveFromMyStore() {
+            this.$store.commit('setIsLoading', true)
+            const id = this.$route.params.id
+            console.log(id*2);
+            const info = {
+                id: id
+            }
+            await axios
+                .post(`/api/v1/products/removefrommystore/`, info)
+                .then(response => {
+                    console.log("I am here");
                     this.$router.push('/my-store')
                 })
                 .catch(error => {
