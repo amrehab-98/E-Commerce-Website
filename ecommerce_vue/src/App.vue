@@ -38,11 +38,9 @@
           <router-link to="/my-account" class="navbar-item">My Account</router-link>
 
           <div class="navbar-item">
-            <div class="buttons">
+            <div class="buttons" v-if="$store.state.isAuthenticated">
 
-              <router-link to="/log-in" class="button is-danger">Log out</router-link>
- 
-
+              <button class="button is-danger" @click="logout()">Log out</button>
               <router-link to="/cart" class="button is-success">
                 <span class="icon"><i class="fas fa-shopping-cart"></i></span>
                 <span>Cart ({{ cartTotalLength }})</span>
@@ -87,6 +85,17 @@ export default {
   },
   mounted() {
     this.cart = this.$store.state.cart
+  },
+  methods: {
+      logout() {
+            axios.defaults.headers.common["Authorization"] = ""
+            localStorage.removeItem("token")
+            localStorage.removeItem("username")
+            localStorage.removeItem("userid")
+            this.$store.commit('removeToken')
+            this.$store.commit('clearCart')
+            this.$router.push('/')
+      },
   },
   computed: {
       cartTotalLength() {

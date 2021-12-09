@@ -26,7 +26,10 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/about',
@@ -50,67 +53,97 @@ const routes = [
     path: '/my-account',
     name: 'MyAccount',
     component: MyAccount,
-    // meta: {
-    //     requireLogin: true
-    // }
+    meta: {
+        requireLogin: true
+    }
   },
   {
     path: '/search',
     name: 'Search',
-    component: Search
+    component: Search,
+    meta: {
+        requireLogin: true
+    }
   },
   {
     path: '/cart',
     name: 'Cart',
-    component: Cart
+    component: Cart,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/cart/success',
     name: 'Success',
-    component: Success
+    component: Success,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/cart/checkout',
     name: 'Checkout',
     component: Checkout,
-    // meta: {
-    //     requireLogin: true
-    // }
+    meta: {
+        requireLogin: true
+    }
   },
   {
     path: '/:username/products/:id',
     name: 'Product',
-    component: Product
+    component: Product,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/users/:username',
     name: 'UserStore',
-    component: UserStore
+    component: UserStore,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/users',
     name: 'Users',
-    component: Users
+    component: Users,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/my-store/add-product',
     name: 'AddProduct',
-    component: AddProduct
+    component: AddProduct,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/my-store/edit-product/:id',
     name: 'EditProduct',
-    component: EditProduct
+    component: EditProduct,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path: '/my-store',
     name: 'MyStore',
-    component: MyStore
+    component: MyStore,
+    meta: {
+      requireLogin: true
+    }
   },
   {
     path:'/my-account/charge-balance',
     name:'ChargeBalance',
-    component:ChargeBalance
+    component:ChargeBalance,
+    meta: {
+      requireLogin: true
+    }
   },
 ]
 
