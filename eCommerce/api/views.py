@@ -19,6 +19,15 @@ class ProductsList(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        request.data['owner'] = request.user.id
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
 class SpecificProductDetails(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -48,14 +57,6 @@ class ProductsDetails(APIView):
             return Response(result)
         except MyUser.DoesNotExist:
             raise Http404
-
-    def post(self, request, username):
-        serializer = ProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
     def delete(self, request, username, id = None):
         item = get_object_or_404(Product, id = id)
@@ -81,8 +82,10 @@ class UsersList(APIView):
 
 class Users(APIView):
     def post(self, request):
+        print(request.data)
         serializer = RegSerializer(data=request.data)
         if serializer.is_valid():
+            print("hi ",serializer.data)
             user = serializer.save()
             token = Token.objects.get(user=user).key
             return Response({"status": "success", "token": token})

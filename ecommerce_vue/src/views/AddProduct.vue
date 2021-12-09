@@ -15,7 +15,7 @@
                     <div class="field">
                         <label>Product name</label>
                         <div class="control">
-                            <input type="text" class="input" v-model="productname">
+                            <input type="text" class="input" v-model="name">
                         </div>
                     </div>
 
@@ -63,7 +63,7 @@ export default {
     name: 'AddProduct',
     data() {
         return {
-            productname: '',
+            name: '',
             category: '',
             description: '',
             price: 1,
@@ -103,8 +103,8 @@ export default {
         },
         submitForm() {
             this.errors = []
-            if (this.productname === '') {
-                this.errors.push('The productname is missing')
+            if (this.name === '') {
+                this.errors.push('The name is missing')
             }
             if (this.category=== '') {
                 this.errors.push('The category is too short')
@@ -117,7 +117,7 @@ export default {
             }
             if (!this.errors.length) {
                 const formData = {
-                    productname: this.productname,
+                    name: this.name,
                     category: this.category,
                     description: this.description,
                     category: this.category,
@@ -125,7 +125,7 @@ export default {
                     image: this.data
                 }
                 axios
-                    .post("/api/v1/users/", formData)
+                    .post(`/api/v1/products/`, formData)
                     .then(response => {
                         toast({
                             message: 'Product added successfully ',
