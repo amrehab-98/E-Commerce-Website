@@ -37,7 +37,7 @@
                     <div class="field">
                         <label>Price</label>
                         <div class="control">
-                            <input type="number" class="input" v-model="price">
+                            <input type="number" class="input" :min = "1" :step="0.01" v-model="price">
                         </div>
                     </div>
 
