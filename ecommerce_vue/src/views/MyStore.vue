@@ -7,16 +7,14 @@
       </div>
 
        <MyProductBox 
-        v-for="product in Products"
+        v-for="product in Product['owned_products']"
         v-bind:key="product.id"
         v-bind:product="product" />
 
         <ProductBox 
-        v-for="product in Products"
+        v-for="product in Product['not_owned_products']"
         v-bind:key="product.id"
         v-bind:product="product" />
-
-      
 
     </div>
   </div>
@@ -30,7 +28,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      Product: []
+      Product: {}
     }
   },
   components: {
@@ -44,14 +42,16 @@ export default {
   methods: {
     async getMyProducts() {
       this.$store.commit('setIsLoading', true)
+
       await axios
-        .get('/api/v1/users/')
+        .get('/api/v1/store/')
         .then(response => {
-          this.Products = response.data
+          this.Product = response.data
         })
         .catch(error => {
           console.log(error)
         })
+
       this.$store.commit('setIsLoading', false)
     }
   }

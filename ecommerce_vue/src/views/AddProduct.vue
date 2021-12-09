@@ -125,7 +125,7 @@ export default {
                     image: this.data
                 }
                 axios
-                    .post(`/api/v1/products/`, formData)
+                    .post(`/api/v1/store/`, formData)
                     .then(response => {
                         toast({
                             message: 'Product added successfully ',
