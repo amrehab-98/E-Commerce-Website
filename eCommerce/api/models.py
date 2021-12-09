@@ -32,7 +32,7 @@ class Product(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return f'/{self.owner.username}/{self.slug}/'
+        return f'/{self.owner.username}/products/{self.id}/'
 
     def get_image(self):
         if self.image:
