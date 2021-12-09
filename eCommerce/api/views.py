@@ -248,7 +248,6 @@ class RemoveFromMyStore(APIView):
     def post(self, request):
         product = Product.objects.get(id=request.data['id'])
         request.user.not_owned_products.remove(product) 
-        request.user.not_owned_products.add(product) 
         request.user.balance = request.user.balance.to_decimal()+decimal.Decimal('0')
         request.user.save()
         return Response({"status": "success", "data": request.data}, status.HTTP_201_CREATED)
