@@ -13,7 +13,7 @@
            <div class = "column is-12 box">
                 <div class="column is-12">
                     <label class="label">Enter Amount</label>
-                    <input class = "input" type="number" v-model="amount">
+                    <input class = "input" type="number" :min="50" v-model="amount">
                 </div>
 
                  <hr>
