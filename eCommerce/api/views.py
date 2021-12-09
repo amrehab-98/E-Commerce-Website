@@ -138,7 +138,7 @@ class OrdersList(APIView):
                 return Response({"status": "error", "data": "Insufficient Balance"})       
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-class SearchProducts(APIView):
+class Search(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
@@ -146,22 +146,27 @@ class SearchProducts(APIView):
         if query:
             products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
             serializer = ProductSerializer(products, many=True)
-            return Response(serializer.data)
+            users = MyUser.objects.filter(Q(username__icontains=query))
+            serializer2 = UserSerializer(users, many=True)
+            result = {}
+            result['products'] = serializer.data
+            result['users'] = serializer2.data
+            return Response(result)
         else:
             return Response({"products": []})
 
-class SearchStores(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-    def post(self, request):
-        query = request.data.get('query', '')
+# class SearchStores(APIView):
+#     authentication_classes = [authentication.TokenAuthentication]
+#     permission_classes = [permissions.IsAuthenticated]
+#     def post(self, request):
+#         query = request.data.get('query', '')
 
-        if query:
-            users = MyUser.objects.filter(Q(first_name__icontains=query) | Q(last_name_icontains=query) | Q(username_icontains=query))
-            serializer = UserSerializer(users, many=True)
-            return Response(serializer.data)
-        else:
-            return Response({"users": []})
+#         if query:
+#             users = MyUser.objects.filter(Q(first_name__icontains=query) | Q(last_name_icontains=query) | Q(username_icontains=query))
+#             serializer = UserSerializer(users, many=True)
+#             return Response(serializer.data)
+#         else:
+#             return Response({"users": []})
 
 class EditAndDeleteProduct(APIView):
     authentication_classes = [authentication.TokenAuthentication]
