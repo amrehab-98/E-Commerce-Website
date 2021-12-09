@@ -13,8 +13,8 @@ class AccountAdmin(UserAdmin):
     list_filter = ()
     fieldsets = ()
 
-    def get_not_owned_products(self, obj):
-        return "\n".join([p.not_owned_products for p in obj.not_owned_products.all()])
+    # def get_not_owned_products(self, obj):
+    #     return "\n".join([p.not_owned_products for p in obj.not_owned_products.all()])
 
 
 # Register your models here.
