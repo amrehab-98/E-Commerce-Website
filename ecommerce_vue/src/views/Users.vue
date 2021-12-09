@@ -6,7 +6,7 @@
           <h2 class=" title is-size-2 has-text-centered">Users</h2>
       </div>
 
-      <UserBox 
+      <UserBox :username="myuser.username"
         v-for="myuser in Users"
         v-bind:key="myuser.id"
         v-bind:myuser="myuser" />
@@ -35,7 +35,7 @@ export default {
     async getUsers() {
       this.$store.commit('setIsLoading', true)
       await axios
-        .get('/api/v1/users/')
+        .get('/api/v1/stores/')
         .then(response => {
           this.Users = response.data
         })

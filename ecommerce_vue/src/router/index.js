@@ -81,7 +81,7 @@ const routes = [
     component: Product
   },
   {
-    path: '/users/:myuser_slug',
+    path: '/users/:username',
     name: 'UserStore',
     component: UserStore
   },

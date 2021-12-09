@@ -4,7 +4,7 @@
 
             <h3 class="is-size-4">{{ myuser.username }}</h3>
 
-            <router-link to="/" class="button is-dark mt-4">View Store</router-link>
+            <router-link v-bind:to="'/users/'+myuser.username" class="button is-dark mt-4">View Store</router-link>
         </div>
     </div>
 </template>

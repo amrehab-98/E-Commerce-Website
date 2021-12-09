@@ -3,16 +3,17 @@
   
     <div class="columns is-multiline">
       <div class="column is-12">
-          <h2 class=" title is-size-2 has-text-centered">{{myuser.username}} Store</h2>
+          <h2 class=" title is-size-2 has-text-centered">{{username}} Store</h2>
       </div>
 
-        <ProductBox 
-        v-for="product in Products"
+      <ProductBox 
+        v-for="product in Product['owned_products']"
         v-bind:key="product.id"
         v-bind:product="product" />
-
-      
-
+      <ProductBox 
+        v-for="product in Product['not_owned_products']"
+        v-bind:key="product.id"
+        v-bind:product="product" />
     </div>
   </div>
 </template>
@@ -26,7 +27,7 @@ export default {
   data() {
     return {
       Product: [],
-      myuser : {}
+      username : this.$route.params.username
     }
   },
   components: {
@@ -41,15 +42,16 @@ export default {
     async getMyProducts() {
       this.$store.commit('setIsLoading', true)
       await axios
-        .get('/api/v1/users/')
+        .get('/api/v1/'+this.username+'/products')
         .then(response => {
-          this.Products = response.data
+          this.Product = response.data
         })
         .catch(error => {
           console.log(error)
         })
       this.$store.commit('setIsLoading', false)
     }
+    
   }
 }
 </script>

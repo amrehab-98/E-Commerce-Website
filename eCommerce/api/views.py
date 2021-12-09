@@ -76,6 +76,7 @@ class ProductsDetails(APIView):
             raise Http404
 
 class UsersList(APIView):
+    # this is /stores/
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
