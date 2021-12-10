@@ -1,10 +1,15 @@
 <template>
     <div class="column is-3">
-        <div class="box">
-
+        <div class="card" style="height:100% ;word-wrap:break-word">
+            <div class ="card-content" style="height:60%">
             <h3 class="is-size-4">{{ myuser.username }}</h3>
-
-            <router-link v-bind:to="'/users/'+myuser.username" class="button is-dark mt-4">View Store</router-link>
+            </div>
+            <div class="card-footer">
+                <div class = "card-footer-item" style="height:40%">
+                    <router-link v-bind:to="'/users/'+myuser.username" class="button is-dark mt-4">View Store</router-link>
+                </div>
+            </div>   
+        
         </div>
     </div>
 </template>
