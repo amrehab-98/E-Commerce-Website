@@ -69,7 +69,7 @@ export default {
             price: 1,
             image : [],
             errors: [],
-            selectedFile:null,
+            //selectedFile:null,
         }
     },
 
@@ -79,7 +79,7 @@ export default {
 
     methods: {
         uploadImage(event) {
-            this.selectedFile=event.target.files[0]
+            //this.selectedFile=event.target.files[0]
             const URL = 'http://foobar.com/upload'; 
 
             let data = new FormData();
@@ -117,14 +117,14 @@ export default {
                 this.errors.push('The price must be positive number')
             }
             if (!this.errors.length) {
-                const fd = new FormData();
-                fd.append('image', this.selectedFile, this.selectedFile.name)
+                // const fd = new FormData();
+                // fd.append('image', this.selectedFile, this.selectedFile.name)
                 const formData = {
                     name: this.name,
                     category: this.category,
                     description: this.description,
                     price: this.price,
-                    image: fd
+                    //image: fd
                 }
                 axios
                     .post(`/api/v1/store/`, formData)
