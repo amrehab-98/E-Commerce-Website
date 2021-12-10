@@ -30,12 +30,26 @@
             <hr>
             <br><br><br><br>
             <div class="column is-12 has-text-centered">
-                <h4 class="title"> <strong> Orders</strong></h4>
+                <h4 class="title"> <strong>Products</strong></h4>
 
-                <OrderSummary
-                    v-for="order in orders"
-                    v-bind:key="order.id"
-                    v-bind:order="order" />
+                <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th width="50%">Product</th>
+                    <th width="50%">Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr
+                    v-for="item in products"
+                    v-bind:key="item.id"
+                >
+                    <td width="50%">{{ item.name }}</td>
+                    <td width="50%">${{ item.price }}</td>
+                </tr>
+            </tbody>
+        </table>
             </div>
         </div>
     </div>
@@ -51,7 +65,7 @@ export default {
     },
     data() {
         return {
-            orders: [],
+            products: [],
             myuser : {
                 data : {
                     get_name: '',
@@ -73,7 +87,7 @@ export default {
             await axios
                 .get('/api/v1/orders/')
                 .then(response => {
-                    this.orders = response.data
+                    this.products = response.data
                 })
                 .catch(error => {
                     console.log(error)

@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status, authentication, permissions
 from django.shortcuts import get_object_or_404
 import decimal
-from .models import MyUser, Product, Order
-from .serializers import ProductSerializer, RegSerializer, UserSerializer, MyOrderSerializer, OrderSerializer, PersonalInfoSerializer
+from .models import MyUser, Product, Order, SoldProduct
+from .serializers import ProductSerializer, RegSerializer, SoldProductSerializer, UserSerializer, MyOrderSerializer, OrderSerializer, PersonalInfoSerializer
 from rest_framework.authtoken.models import Token
 from django.conf import settings
 import stripe
@@ -121,9 +121,13 @@ class OrdersList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
+    # def get(self, request, format=None):
+    #     orders = Order.objects.filter(user=request.user)
+    #     serializer = MyOrderSerializer(orders, many=True)
+    #     return Response(serializer.data)
     def get(self, request, format=None):
-        orders = Order.objects.filter(user=request.user)
-        serializer = MyOrderSerializer(orders, many=True)
+        products = SoldProduct.objects.filter(buyer=request.user)
+        serializer = SoldProductSerializer(products, many=True)
         return Response(serializer.data)
     
     def post(self, request):
@@ -136,9 +140,19 @@ class OrdersList(APIView):
                     owner = Product.objects.get(id=item.get('product').id).owner
                     owner.balance = owner.balance.to_decimal() + item.get('product').price.to_decimal()
                     product =Product.objects.get(id=item.get('product').id)
+                    sold_product = SoldProduct()
+                    sold_product.seller = product.owner
+                    sold_product.buyer = request.user
+                    sold_product.category = product.category
+                    sold_product.name = product.name
+                    sold_product.slug=product.slug
+                    sold_product.description=product.description
+                    sold_product.image = product.image
+                    sold_product.thumbnail=product.thumbnail
                     product.owner = request.user
                     product.price = product.price.to_decimal() + decimal.Decimal('0')
-                    
+                    sold_product.price = product.price
+                    sold_product.save()
                     product.save()
                     owner.save()
                 request.user.save()

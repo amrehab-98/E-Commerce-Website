@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import MyUser, Order, OrderItem, Product
+from api.models import MyUser, Order, OrderItem, Product, SoldProduct
 from django.contrib.auth.admin import UserAdmin
 
 #UserAdmin.fieldsets += ('Custom fields set', {'fields': ('not_owned_product', 'balance')}),
@@ -19,6 +19,7 @@ class AccountAdmin(UserAdmin):
 
 # Register your models here.
 admin.site.register(Product)
+admin.site.register(SoldProduct)
 admin.site.register(MyUser, AccountAdmin)
 admin.site.register(Order)
 admin.site.register(OrderItem)

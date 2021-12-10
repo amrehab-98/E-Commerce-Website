@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import MyUser, Product, Order, OrderItem
+from .models import MyUser, Product, Order, OrderItem, SoldProduct
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -10,6 +10,22 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "category",
             "owner",
+            "get_absolute_url",
+            "description",
+            "price",
+            "get_image",
+            "get_thumbnail"
+        )
+
+class SoldProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SoldProduct
+        fields = (
+            "id",
+            "name",
+            "category",
+            "seller",
+            "buyer",
             "get_absolute_url",
             "description",
             "price",
