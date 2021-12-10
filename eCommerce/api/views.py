@@ -129,7 +129,12 @@ class OrdersList(APIView):
     def get(self, request, format=None):
         products = SoldProduct.objects.filter(buyer=request.user)
         serializer = SoldProductSerializer(products, many=True)
-        return Response(serializer.data)
+        sold_products = SoldProduct.objects.filter(seller=request.user)
+        soldSerializer = SoldProductSerializer(sold_products, many=True)
+        result = {}
+        result['purchased'] = serializer.data
+        result['sold'] = soldSerializer.data
+        return Response(result, status.HTTP_200_OK)
     
     def post(self, request):
         serializer = OrderSerializer(data=request.data)

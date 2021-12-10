@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-dark">
+    <nav class="navbar is-dark" v-if="$store.state.isAuthenticated">
       <div class="navbar-brand">
         <router-link to="/" class="navbar-item"><strong>LA Store</strong></router-link>
 
@@ -17,7 +17,7 @@
             <form method="get" action="/search">
               <div class="field has-addons">
                 <div class="control">
-                  <input type="text" class="input" placeholder="What are you looking for?" name="query">
+                  <input type="text" class="input" placeholder="Search" name="query">
                 </div>
 
                 <div class="control">
@@ -94,7 +94,7 @@ export default {
             localStorage.removeItem("userid")
             this.$store.commit('removeToken')
             this.$store.commit('clearCart')
-            this.$router.push('/')
+            this.$router.push('/log-in')
       },
   },
   computed: {

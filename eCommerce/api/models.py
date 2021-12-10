@@ -82,13 +82,16 @@ class SoldProduct(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return f'/{self.owner.username}/products/{self.id}/'
-
     def get_image(self):
         if self.image:
             return 'http://127.0.0.1:8000' + self.image.url
         return ''
+
+    def get_seller_name(self):
+        return self.seller.username
+
+    def get_buyer_name(self):
+        return self.buyer.username
 
     def get_thumbnail(self):
         if self.thumbnail:

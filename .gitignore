@@ -792,3 +792,5 @@ eCommerceDB/shards/shard2/shardsvr6/mongod.log.2021-12-09T12-15-57
 eCommerceDB/configsvr/cfg1/diagnostic.data/metrics.2021-12-09T21-29-32Z-00000
 eCommerceDB/configsvr/cfg2/diagnostic.data/metrics.2021-12-09T21-11-03Z-00000
 eCommerceDB/configsvr/cfg3/diagnostic.data/metrics.2021-12-09T22-13-24Z-00000
+eCommerce/api/migrations/0001_initial.py
+eCommerce/api/migrations/__init__.py

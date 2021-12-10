@@ -30,27 +30,55 @@
             <hr>
             <br><br><br><br>
             <div class="column is-12 has-text-centered">
-                <h4 class="title"> <strong>Products</strong></h4>
+                <h4 class="title"> <strong>Purchase History</strong></h4>
 
                 <table class="table is-fullwidth">
-            <thead>
-                <tr>
-                    <th width="50%">Product</th>
-                    <th width="50%">Price</th>
-                </tr>
-            </thead>
+                    <thead>
+                        <tr>
+                            <th width="33%">Product</th>
+                            <th width="33%">Price</th>
+                            <th width="33%">Seller</th>
+                        </tr>
+                    </thead>
 
-            <tbody>
-                <tr
-                    v-for="item in products"
-                    v-bind:key="item.id"
-                >
-                    <td width="50%">{{ item.name }}</td>
-                    <td width="50%">${{ item.price }}</td>
-                </tr>
-            </tbody>
-        </table>
+                    <tbody>
+                        <tr
+                            v-for="item in products.purchased"
+                            v-bind:key="item.id"
+                        >
+                            <td width="33%">{{ item.name }}</td>
+                            <td width="33%">${{ item.price }}</td>
+                            <td width="33%">{{ item.get_seller_name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <hr>
+            <div class="column is-12 has-text-centered mt-6">
+                <h4 class="title"> <strong>Sold History</strong></h4>
+
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th width="33%">Product</th>
+                            <th width="33%">Price</th>
+                            <th width="33%">Buyer</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr
+                            v-for="item in products.sold"
+                            v-bind:key="item.id"
+                        >
+                            <td width="33%">{{ item.name }}</td>
+                            <td width="33%">${{ item.price }}</td>
+                            <td width="33%">{{ item.get_buyer_name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
     </div>
 </template>
@@ -65,7 +93,7 @@ export default {
     },
     data() {
         return {
-            products: [],
+            products: {},
             myuser : {
                 data : {
                     get_name: '',
@@ -88,6 +116,7 @@ export default {
                 .get('/api/v1/orders/')
                 .then(response => {
                     this.products = response.data
+                    console.log(response.data);
                 })
                 .catch(error => {
                     console.log(error)
