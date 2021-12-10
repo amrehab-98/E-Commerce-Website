@@ -1,5 +1,5 @@
 from typing import OrderedDict
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.http import Http404
 from django.http.response import HttpResponseBadRequest
 from rest_framework.views import APIView
@@ -270,6 +270,14 @@ class AdminPanel(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
     def get(self, request):
-        product = SoldProduct.objects.all()
-        serializer = SoldProductSerializer(product, many=True)
-        return Response(serializer.data)
+        products = SoldProduct.objects.all()
+        serializer = SoldProductSerializer(products, many=True)
+        total_price = 0
+        total_no_of_products = len(products)
+        for product in products:
+            total_price += product.price.to_decimal()
+        result = {}
+        result['data'] = serializer.data
+        result['total_price'] = total_price
+        result['total_number'] = total_no_of_products
+        return Response(result)
