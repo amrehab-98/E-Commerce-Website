@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from django.db.models import Q
 from django.http import Http404
 from django.http.response import HttpResponseBadRequest
@@ -45,14 +46,14 @@ class MyStoreProductsList(APIView):
             return Response({"status": "error", "data": "error editing product"})
     
     def post(self, request):
-        serializer = ProductSerializer(data=request.data)
-        print("request data: " ,request.data)
-        request.data['owner'] = request.user.id
-        if serializer.is_valid():
-            
+        data = OrderedDict()
+        data.update(request.data)
+        data['owner'] = request.user.id
+        serializer = ProductSerializer(data=data)
+        
+        if serializer.is_valid():            
             serializer.save()
-            print("serializer data: " ,serializer.data)
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_201_CREATED)
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -219,9 +220,8 @@ class PersonalInfo(APIView):
     def get(self, request):
         user = MyUser.objects.get(id = request.user.id)
         user.balance = user.balance.to_decimal()+decimal.Decimal('0')
-        print("user balance ", user.balance)
         serializer = PersonalInfoSerializer(user)  
-        return Response({"status": "success", "data": serializer.data})
+        return Response({"status": "success", "data": serializer.data}, status.HTTP_200_OK)
   
 class AddBalance(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -229,7 +229,6 @@ class AddBalance(APIView):
     def post(self, requset):
         user = MyUser.objects.get(id = requset.user.id)
         data = requset.data
-        print("data: ", data)
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             charge = stripe.Charge.create(
@@ -248,7 +247,6 @@ class AddToMyStore(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
-        print("id: ", request.data['id'])
         product = Product.objects.get(id=request.data['id'])
         product.price = product.price.to_decimal() + decimal.Decimal('0')
         request.user.not_owned_products.add(product) 

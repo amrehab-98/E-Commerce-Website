@@ -794,3 +794,10 @@ eCommerceDB/configsvr/cfg2/diagnostic.data/metrics.2021-12-09T21-11-03Z-00000
 eCommerceDB/configsvr/cfg3/diagnostic.data/metrics.2021-12-09T22-13-24Z-00000
 eCommerce/api/migrations/0001_initial.py
 eCommerce/api/migrations/__init__.py
+eCommerceDB/configsvr/cfg2/diagnostic.data/metrics.2021-12-10T14-10-23Z-00000
+eCommerceDB/shards/shard1/shardsvr1/diagnostic.data/metrics.2021-12-10T01-37-00Z-00000
+eCommerceDB/shards/shard1/shardsvr2/diagnostic.data/metrics.2021-12-10T01-19-28Z-00000
+eCommerceDB/shards/shard1/shardsvr3/diagnostic.data/metrics.2021-12-10T02-05-13Z-00000
+eCommerceDB/shards/shard2/shardsvr4/diagnostic.data/metrics.2021-12-10T01-38-34Z-00000
+eCommerceDB/shards/shard2/shardsvr5/diagnostic.data/metrics.2021-12-10T02-24-29Z-00000
+eCommerceDB/shards/shard2/shardsvr6/diagnostic.data/metrics.2021-12-10T01-25-08Z-00000
