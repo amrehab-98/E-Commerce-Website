@@ -10,6 +10,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "category",
             "owner",
+            "get_owner_name",
             "get_absolute_url",
             "description",
             "price",
@@ -40,6 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "get_name",
+            "email",
             "get_absolute_url",
             "not_owned_products"
         )

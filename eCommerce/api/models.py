@@ -31,6 +31,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_owner_name(self):
+        return self.owner.username    
+
     def get_absolute_url(self):
         return f'/{self.owner.username}/products/{self.id}/'
 

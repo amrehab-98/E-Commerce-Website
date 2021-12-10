@@ -7,7 +7,6 @@
                 </figure>
 
                 <h1 class="title">{{ product.name }}</h1>
-
                 <p>{{ product.description }}</p>
             </div>
 
@@ -15,7 +14,7 @@
                 <h2 class="subtitle">Information</h2>
 
                 <p><strong>Price: </strong>${{ product.price }}</p>
-
+                <p><strong>Seller: </strong>{{ product.get_owner_name }}</p>
                 <div class="field has-addons mt-6">
                     <div class="control">
                         <a class="button is-dark" @click="addToCart()">Add to cart</a>
