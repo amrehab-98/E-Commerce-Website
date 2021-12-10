@@ -22,7 +22,7 @@
 
                     <tbody>
                         <tr
-                            v-for="item in products"
+                            v-for="item in products['data']"
                             v-bind:key="item.id"
                         >
                             <td width="20%">{{ item.name }}</td>
@@ -32,9 +32,17 @@
                             <td width="20%">{{ format_date(item.date_added) }}</td>
                         </tr>
                     </tbody>
-                </table>
+                </table>   
             </div>
-
+            <br><br><br><br><br><br><br><br><br><br><br><br>
+            <div class = "column is-12 box">
+                <div class="column is-12">
+                    <h2 class = "subtitle" ><strong>Total Money: </strong>${{products['total_price']}}</h2>
+                </div>
+                <div class="column is-12">
+                    <h2 class = "subtitle" ><strong>Number of sold products: </strong>{{products['total_number']}}</h2>
+                </div>
+           </div>
         </div>
     </div>
 </template>
