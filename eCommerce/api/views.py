@@ -106,7 +106,8 @@ class UsersList(APIView):
         return Response(serializer.data)
 
 class Users(APIView):
-    def post(self, request):
+    # ss
+    def post(self, request): 
         print(request.data)
         serializer = RegSerializer(data=request.data)
         if serializer.is_valid():
