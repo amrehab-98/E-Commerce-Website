@@ -29,6 +29,7 @@ class SoldProductSerializer(serializers.ModelSerializer):
             "get_buyer_name",
             "description",
             "price",
+            "date_added",
             "get_image",
             "get_thumbnail"
         )

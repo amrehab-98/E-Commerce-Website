@@ -13,6 +13,8 @@ from rest_framework.authtoken.models import Token
 from django.conf import settings
 import stripe
 
+from api import serializers
+
 # Create your views here.
 class MyStoreProductsList(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -263,3 +265,11 @@ class RemoveFromMyStore(APIView):
         request.user.balance = request.user.balance.to_decimal()+decimal.Decimal('0')
         request.user.save()
         return Response({"status": "success", "data": request.data}, status.HTTP_201_CREATED)
+
+class AdminPanel(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    def get(self, request):
+        product = SoldProduct.objects.all()
+        serializer = SoldProductSerializer(product, many=True)
+        return Response(serializer.data)

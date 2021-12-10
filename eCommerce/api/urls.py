@@ -20,4 +20,5 @@ urlpatterns = [
     path('account/charge/', views.AddBalance.as_view()),
     path('products/addtomystore/', views.AddToMyStore.as_view()),
     path('products/removefrommystore/', views.RemoveFromMyStore.as_view()),
+    path('admin/', views.AdminPanel.as_view()),
 ]

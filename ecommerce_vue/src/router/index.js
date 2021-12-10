@@ -18,6 +18,7 @@ import AddProduct from '../views/AddProduct.vue'
 import MyStore from '../views/MyStore.vue'
 import ChargeBalance from '../views/ChargeBalance.vue' 
 import EditProduct from '../views/EditProduct.vue'
+import Admin from '../views/Admin.vue'
 
 
 
@@ -141,6 +142,14 @@ const routes = [
     path:'/my-account/charge-balance',
     name:'ChargeBalance',
     component:ChargeBalance,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path:'/admin-panel',
+    name:'AdminPanel',
+    component:Admin,
     meta: {
       requireLogin: true
     }
