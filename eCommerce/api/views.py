@@ -29,23 +29,40 @@ class MyStoreProductsList(APIView):
             result = {}
             result['owned_products'] = serializer.data
             result['not_owned_products'] = not_owned_serializer.data
-            return Response(result)
+            return Response(result, status.HTTP_200_OK)
         except:
             raise HttpResponseBadRequest
     
+    # def put(self, request):
+    #     product = get_object_or_404(Product, id= int(request.data['id']))
+    #     print("product is ", request.data)
+    #     if request.user != product.owner:
+    #         return Response({"status": "error", "data": "not authorized"})
+    #     try:
+    #         serializer = ProductSerializer(product, data=request.data)
+    #         serializer.save()
+    #         if serializer.is_valid():
+    #             print("valid data")
+    #             serializer.save()            
+    #         return Response({"status": "success", "data": serializer.data}, status.HTTP_200_OK)
+    #     except:
+    #         return Response({"status": "error", "data": "error editing product"}, status.HTTP_400_BAD_REQUEST)
     def put(self, request):
         product = Product.objects.get(id=request.data['id'])
         if request.user != product.owner:
-            return Response({"status": "error", "data": "not authorized"})
+            return Response({"status": "error", "data": "not authorized"}, status.HTTP_403_FORBIDDEN)
         try:
             product.name = request.data['name']
             product.category = request.data['category']
             product.description = request.data['description']
             product.price = request.data['price']
             product.save()
-            return Response({"status": "success"})
+            return Response({"status": "success", "data":{"name": product.name,
+                                                           "category": product.category,
+                                                           "description": product.description,
+                                                           "price": product.price}}, status.HTTP_200_OK)
         except:
-            return Response({"status": "error", "data": "error editing product"})
+            return Response({"status": "error", "data": "error editing product"}, status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
         data = OrderedDict()
@@ -67,7 +84,7 @@ class ProductsList(APIView):
         for product in products:
             product.price = product.price.to_decimal() + decimal.Decimal('0')
         serializer = ProductSerializer(products, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status.HTTP_200_OK)
 
 class SpecificProductDetails(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -121,7 +138,7 @@ class Users(APIView):
             token = Token.objects.get(user=user).key
             return Response({"status": "success", "token": token}, status.HTTP_201_CREATED)
         else:
-            return Response({"status": "error", "data": serializer.errors})
+            return Response({"status": "error", "data": serializer.errors}, status.HTTP_401_UNAUTHORIZED)
 
 
 class OrdersList(APIView):
@@ -210,9 +227,9 @@ class EditAndDeleteProduct(APIView):
     def delete(self, request, id = None):
         item = get_object_or_404(Product, id = id)
         if request.user != item.owner:
-            return Response({"status": "error", "data": "not authorized"})
+            return Response({"status": "error", "data": "not authorized"}, status.HTTP_403_FORBIDDEN)
         item.delete()
-        return Response({"status": "success", "data": "Item Deleted"})
+        return Response({"status": "success", "data": "Item Deleted"}, status.HTTP_200_OK)
 
 
 

@@ -138,10 +138,9 @@ export default {
                     })
                     .catch(error => {
                         if (error.response) {
-                            for (const property in error.response.data) {
-                                this.errors.push(`${property}: ${error.response.data[property]}`)
-                            }
-                            console.log(JSON.stringify(error.response.data))
+                            for (const property in error.response.data.data) {
+                                this.errors.push(`${property}: ${error.response.data.data[property]}`)
+                            }   
                         } else if (error.message) {
                             this.errors.push('Something went wrong. Please try again')
                             
