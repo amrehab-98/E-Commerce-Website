@@ -46,9 +46,12 @@ class MyStoreProductsList(APIView):
     
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
+        print("request data: " ,request.data)
         request.data['owner'] = request.user.id
         if serializer.is_valid():
+            
             serializer.save()
+            print("serializer data: " ,serializer.data)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         else:
             return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -58,6 +61,8 @@ class ProductsList(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         products = Product.objects.exclude(owner=request.user)
+        for product in products:
+            product.price = product.price.to_decimal() + decimal.Decimal('0')
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
 
