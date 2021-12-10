@@ -107,12 +107,11 @@ class UsersList(APIView):
 
 class Users(APIView):
     def post(self, request):
-        print(request.data)
         serializer = RegSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             token = Token.objects.get(user=user).key
-            return Response({"status": "success", "token": token})
+            return Response({"status": "success", "token": token}, status.HTTP_201_CREATED)
         else:
             return Response({"status": "error", "data": serializer.errors})
 
