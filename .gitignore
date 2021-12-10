@@ -811,3 +811,6 @@ eCommerceDB/shards/shard1/shardsvr3/diagnostic.data/metrics.2021-12-10T17-49-43Z
 eCommerceDB/shards/shard2/shardsvr4/diagnostic.data/metrics.2021-12-10T17-58-28Z-00000
 eCommerceDB/shards/shard2/shardsvr5/diagnostic.data/metrics.2021-12-10T17-15-05Z-00000
 eCommerceDB/shards/shard2/shardsvr6/diagnostic.data/metrics.2021-12-10T18-11-18Z-00000
+eCommerceDB/configsvr/cfg1/diagnostic.data/metrics.2021-12-10T14-48-49Z-00000
+eCommerceDB/configsvr/cfg3/diagnostic.data/metrics.2021-12-10T15-56-34Z-00000
+eCommerceDB/router/mongod.diagnostic.data/metrics.2021-12-10T17-48-29Z-00000
