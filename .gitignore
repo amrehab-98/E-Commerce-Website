@@ -792,3 +792,14 @@ eCommerceDB/shards/shard2/shardsvr6/mongod.log.2021-12-09T12-15-57
 eCommerceDB/configsvr/cfg3/diagnostic.data/metrics.2021-12-09T22-13-24Z-00000
 eCommerceDB/configsvr/cfg2/diagnostic.data/metrics.2021-12-09T21-11-03Z-00000
 eCommerceDB/configsvr/cfg1/diagnostic.data/metrics.2021-12-09T21-29-32Z-00000
+eCommerceDB/configsvr/cfg1/diagnostic.data/metrics.2021-12-09T17-27-04Z-00000
+eCommerceDB/configsvr/cfg2/diagnostic.data/metrics.2021-12-09T17-27-20Z-00000
+eCommerceDB/configsvr/cfg3/diagnostic.data/metrics.2021-12-09T17-27-38Z-00000
+eCommerceDB/router/mongod.diagnostic.data/metrics.2021-12-09T17-30-28Z-00000
+eCommerceDB/shards/shard1/shardsvr1/diagnostic.data/metrics.2021-12-09T17-28-02Z-00000
+eCommerceDB/shards/shard1/shardsvr2/diagnostic.data/metrics.2021-12-09T17-28-19Z-00000
+eCommerceDB/shards/shard1/shardsvr3/diagnostic.data/metrics.2021-12-09T17-28-37Z-00000
+eCommerceDB/shards/shard2/shardsvr4/diagnostic.data/metrics.2021-12-09T17-28-54Z-00000
+eCommerceDB/shards/shard2/shardsvr4/journal/WiredTigerLog.0000000002
+eCommerceDB/shards/shard2/shardsvr5/diagnostic.data/metrics.2021-12-09T17-29-05Z-00000
+eCommerceDB/shards/shard2/shardsvr6/diagnostic.data/metrics.2021-12-09T17-29-20Z-00000
