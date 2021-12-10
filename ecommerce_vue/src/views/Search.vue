@@ -7,13 +7,12 @@
                 <h2 class="is-size-5 has-text-grey">Search term: "{{ query }}"</h2>
             </div>
             <div class="columns is-multiline">
-            <ProductBox 
+                <ProductBox 
                 v-for="product in products.products"
                 v-bind:key="product.id"
                 v-bind:product="product" />
-            </div>
-            <div class="columns is-multiline">
-            <UserBox :username="products.users.username"
+        
+                <UserBox :username="products.users.username"    
                     v-for="myuser in products.users"
                     v-bind:key="myuser.id"
                     v-bind:myuser="myuser" />
